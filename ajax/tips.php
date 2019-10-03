@@ -1,7 +1,7 @@
 <?php
 
 define('INCLUDE_CHECK',1);
-require "../connect_db.php";
+require "../connect.php";
 
 if(!$_POST['img']) die("There is no such product!");
 

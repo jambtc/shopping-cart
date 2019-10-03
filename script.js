@@ -49,7 +49,7 @@ $(document).ready(function(){
 					}
 	
 	});
-
+	
 });
 
 
@@ -131,8 +131,6 @@ function remove(id)
 	$('#table_'+id).remove();
 	update_total();
 }
-
-
 
 function change(id)
 {

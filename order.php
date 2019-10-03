@@ -1,7 +1,7 @@
 <?php
 
 define('INCLUDE_CHECK',1);
-require "connect_db.php";
+require "connect.php";
 
 if(!$_POST)
 {
@@ -49,7 +49,6 @@ if(!$_POST)
 				
 				$cnt = array();
 				$products = array();
-				$total = 0;
 				
 				foreach($_POST as $key=>$value)
 				{
