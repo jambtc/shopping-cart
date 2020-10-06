@@ -9,8 +9,7 @@ jQuery will drive the AJAX-es on the page, and with the help of the simpletip pl
 [![Screenshot of Shopping cart](img/screenshot.png)](https://github.com/jambtc/shopping-cart)
 
 ### Set up the demo
-If you want to set up a working demo, you'll need to execute the SQL code content's file `table.sql` in your database manager (e.g. phpMyAdmin). It will set up the table and insert a few products. The code is also available in table.sql in the demo files.
-
+If you want to set up a working demo, you'll need to execute the SQL code content's file `table.sql` in your database manager (e.g. phpMyAdmin). It will set up the table and insert a few products.
 
 After this, you should fill in your MySQL credentials in connect.php.example and rename it in connect.php
 
