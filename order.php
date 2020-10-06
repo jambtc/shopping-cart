@@ -61,8 +61,20 @@ if(!$_POST)
 						while ($row = $result->fetch_assoc()) {
 							echo '<h2>'.$cnt[$row['id']].' x '.$row['name'].'</h2>';
 							$total+=$cnt[$row['id']]*$row['price'];
+
+							$items[] = array(
+								'product_id'=>$row['id'],
+								'product_qty'=>$cnt[$row['id']],
+								'product_description'=>$row['name']
+							);
+
 						}
 
+						$return = array(
+							'order_number'=>rand(10000,99999),
+							'order_total'=>$total,
+							'items'=>$items
+						);
 						echo '<h1>Total: $'.$total.'</h1>';
 					}else{
 						echo '<h1>There was an error with your order!</h1>';
@@ -70,6 +82,13 @@ if(!$_POST)
 				?>
 			  <div class="clear"></div>
 				<a href="index.php" class="button">return</a>
+				</br>
+				<h3>json response</h3>
+				<div class="json-response">
+					<?php
+						echo "<pre>".print_r( json_encode($return,JSON_PRETTY_PRINT),true)."</pre>";
+					?>
+				</div>
       </div>
     </div>
 

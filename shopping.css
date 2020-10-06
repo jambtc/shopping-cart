@@ -216,3 +216,21 @@ h2{
 	padding:10px;
 	margin-top:-20px;
 }
+
+.json-response{
+	border-top: 1px solid #000 ;
+	border-right:  1px solid #777;
+	border-left: 1px solid #000;
+	border-bottom:  1px solid #777;
+
+	background-color: rgba(6, 35, 50,0.25);
+
+	text-shadow: 1px 1px 2px white;
+
+	-moz-border-radius:12px;
+	-khtml-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius:12px;
+
+	padding: 5px 5px 0px 5px;
+}
