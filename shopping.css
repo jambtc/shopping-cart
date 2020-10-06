@@ -97,7 +97,7 @@ small{
 	color:#fcfcfc;
 
 	padding:10px;
-	
+
 	-moz-border-radius:12px;
 	-khtml-border-radius: 12px;
 	-webkit-border-radius: 12px;
@@ -133,7 +133,7 @@ a.remove,a.remove:visited{
 #total{
 	clear:both;
 	float:right;
-	font-size:10px;
+	font-size:16px;
 	font-weight:bold;
 	padding:10px 12px;
 	text-transform:uppercase;
@@ -156,12 +156,12 @@ a.button,a.button:visited{
 	margin:0 auto;
 	overflow:hidden;
 
-	color:white;	
+	color:white;
 	font-size:12px;
 	font-weight:bold;
 	text-align:center;
 	text-transform:uppercase;
-	
+
 	background:url(img/button.png) no-repeat center top;
 }
 
@@ -190,19 +190,19 @@ h1{
 h2{
 	font-weight:normal;
 	font-size:20px;
-	
+
 	color:#666666;
 	text-indent:30px;
 	margin:20px 0;
 }
 
-.tutorialzine h1{
+.tutorial h1{
 	color:white;
 	margin-bottom:10px;
 	font-size:48px;
 }
 
-.tutorialzine h3{
+.tutorial h3{
 	color:#F5F5F5;
 	font-size:10px;
 	font-weight:bold;

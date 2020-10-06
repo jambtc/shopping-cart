@@ -4,10 +4,12 @@ if(!defined('INCLUDE_CHECK')) die('You are not allowed to execute this file dire
 
 
 /* Database config */
+
 $db_host		= 'localhost';
 $db_user		= 'root';
-$db_pass		= 'sc1123310326';
-$db_database	= 'my_demo'; 
+$db_pass		= '';
+$db_database	= 'shoppingcart'; 
+
 /* End config */
 
 
