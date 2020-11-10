@@ -147,7 +147,7 @@ a.remove,a.remove:visited{
 }
 
 a.button,a.button:visited{
-	display:none;
+	display:block;
 
 	height:29px;
 	width:136px;

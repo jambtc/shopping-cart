@@ -65,12 +65,15 @@ if(!$_POST)
 							$items[] = array(
 								'product_id'=>$row['id'],
 								'product_qty'=>$cnt[$row['id']],
+								'product_price'=>$row['price'],
 								'product_description'=>$row['name']
 							);
 
 						}
-
+						// creazione array response json
 						$return = array(
+							'merchant_id'=>rand(1,10),
+							'customer_id'=>rand(1000,100000),
 							'order_number'=>rand(10000,99999),
 							'order_total'=>$total,
 							'items'=>$items
@@ -89,6 +92,7 @@ if(!$_POST)
 						echo "<pre>".print_r( json_encode($return,JSON_PRETTY_PRINT),true)."</pre>";
 					?>
 				</div>
+				<a href="send.php" class="button">send to backend</a>
       </div>
     </div>
 
