@@ -5,8 +5,8 @@ require "connect.php";
 
 
 if (isset($_POST['Api'])){
-	setcookie("_XPUBLICKEY", $_POST['Api']['key_public']);
-	setcookie("_XPRIVATEKEY", $_POST['Api']['key_secret']);
+	setcookie("X-PUBLIC-KEY", $_POST['Api']['key_public']);
+	setcookie("X-PRIVATE-KEY", md5($_POST['Api']['key_public'].$_POST['Api']['key_secret']));
 }
 
 

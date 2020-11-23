@@ -56,6 +56,7 @@ if(!$_POST)
 					$query = "SELECT * FROM internet_shop WHERE id IN(".join($products,',').")";
 
 					if ($result = $mysqli->query($query)) {
+						$total = 0;
 						echo '<h1>You ordered:</h1>';
 
 						while ($row = $result->fetch_assoc()) {
@@ -72,6 +73,7 @@ if(!$_POST)
 						}
 						// creazione array response json
 						$return = array(
+							'id'=>rand(1,1000000),
 							'merchant_id'=>rand(1,10),
 							'customer_id'=>rand(1000,100000),
 							'order_number'=>rand(10000,99999),
@@ -92,7 +94,27 @@ if(!$_POST)
 						echo "<pre>".print_r( json_encode($return,JSON_PRETTY_PRINT),true)."</pre>";
 					?>
 				</div>
-				<a href="send.php" class="button">send to backend</a>
+				<?php
+				// preparazione sign api
+				$nonce = explode(' ', microtime());
+
+				$request['data'] = print_r(json_encode($return),true);
+				$request['nonce'] = $nonce[1] . str_pad(substr($nonce[0], 2, 6), 6, '0');
+
+				$postdata = http_build_query($request, '', '&');
+				$path = 'http://localhost/fidelize-dashboard/index.php?r=ipn/send';
+				$sign = hash_hmac('sha512', hash('sha256', $request['nonce'] . $postdata, true), base64_decode($_COOKIE['X-PRIVATE-KEY']), true);
+
+				// echo '<pre>request: '.print_r($request,true).'</pre>';
+				// echo '<pre>postdata: '.print_r($postdata,true).'</pre>';
+				// echo '<pre>privatekey: '.print_r($_COOKIE['X-PRIVATE-KEY'],true).'</pre>';
+				// echo '<pre>sign: '.print_r(base64_encode($sign),true).'</pre>';
+				?>
+
+				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($request),true); ?>' />
+
+
+				<a href="#" class="button" id="sendToBackendButton">send to backend</a>
       </div>
     </div>
 
@@ -100,6 +122,38 @@ if(!$_POST)
 
   </div>
 </div>
+<script>
+var sendToBackendButton = document.querySelector('#sendToBackendButton');
+var backendUrl = '<?php echo $path; ?>';
+
+sendToBackendButton.addEventListener('click', function(){
+	$.ajax({
+		url: backendUrl,
+		type: "POST",
+		data:{
+			'data'	: $('#sendToBackendValues').val(),
+		},
+		dataType: "json",
+		beforeSend: function(xhr) {
+        xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
+				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
+    },
+		success:function(data){
+			console.log('response:',data);
+			if (data.success===true){
+				$('.json-response').text(data.message)
+			}else{
+				$('.json-response').text(data.message);
+			}
+		},
+		error: function(j){
+			var json = jQuery.parseJSON(j.responseText);
+			$('.json-response').text('Unable to send datas.');
+			flagError = true;
+		}
+	});
+});
+</script>
 
 </body>
 </html>

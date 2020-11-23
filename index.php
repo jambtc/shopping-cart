@@ -35,10 +35,10 @@ require "connect.php";
   </div>
 
 	<?php
-	if (!isset($_COOKIE['_XPUBLICKEY'])
-		&& !isset($_COOKIE['_XPRIVATEKEY'])
-		&& empty($_COOKIE['_XPUBLICKEY'])
-		&& empty($_COOKIE['_XPRIVATEKEY']))
+	if (!isset($_COOKIE['X-PUBLIC-KEY'])
+		&& !isset($_COOKIE['X-PRIVATE-KEY'])
+		&& empty($_COOKIE['X-PUBLIC-KEY'])
+		&& empty($_COOKIE['X-PRIVATE-KEY']))
 	{
 	?>
 	<div class="container">
