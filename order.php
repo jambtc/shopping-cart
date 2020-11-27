@@ -72,10 +72,23 @@ if(!$_POST)
 
 						}
 						// creazione array response json
+						// per fare dei test ho predisposto degli stati già preconfezionati
+
+						// commerciante: merchant id:
+						// 2 sex_jam
+
+						// utenti: customer id:
+						// 2 sergio
+						// 3 paolo
+
+						// redirect_url is url where Rules Engine must send his response
+						// test online https://dashboard.fidelize.tk/index.php?r=ipn/rules
+						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
 						$return = array(
 							'id'=>rand(1,1000000),
-							'merchant_id'=>rand(1,10),
-							'customer_id'=>rand(1000,100000),
+							'redirect_url'=>'http://localhost/fidelize-dashboard/index.php?r=ipn/rules',
+							'merchant_id'=>2,
+							'customer_id'=>rand(2,3),
 							'order_number'=>rand(10000,99999),
 							'order_total'=>$total,
 							'items'=>$items
@@ -125,34 +138,48 @@ if(!$_POST)
 <script>
 var sendToBackendButton = document.querySelector('#sendToBackendButton');
 var backendUrl = '<?php echo $path; ?>';
+function wait(ms) { const start = performance.now(); while(performance.now() - start < ms); }
 
 sendToBackendButton.addEventListener('click', function(){
-	$.ajax({
-		url: backendUrl,
-		type: "POST",
-		data:{
-			'data'	: $('#sendToBackendValues').val(),
-		},
-		dataType: "json",
-		beforeSend: function(xhr) {
-        xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
+	function repeated_ajax_check() {
+		$.ajax({
+			url: backendUrl,
+			type: "POST",
+			data:{
+				'data'	: $('#sendToBackendValues').val(),
+			},
+			dataType: "json",
+			beforeSend: function(xhr) {
+				$('.json-response').text('');
+	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
-    },
-		success:function(data){
-			console.log('response:',data);
-			if (data.success===true){
-				$('.json-response').text(data.message)
-			}else{
-				$('.json-response').text(data.message);
+	    },
+			success:function(data){
+				console.log('response:',data);
+				if (data.success==1){
+					$('.json-response').text(data.message);
+				}else if (data.success==2){
+					$('.json-response').html(data.message);
+					console.log("Response error. Trying again...");
+          wait(5000);
+          repeated_ajax_check();
+				}else{
+					$('.json-response').text(data.message);
+				}
+			},
+			error: function(j){
+				console.log(j);
+				console.log("Ajax error. Trying again...");
+				wait(10000);
+				repeated_ajax_check();
 			}
-		},
-		error: function(j){
-			var json = jQuery.parseJSON(j.responseText);
-			$('.json-response').text('Unable to send datas.');
-			flagError = true;
-		}
-	});
+		});
+	}
+	repeated_ajax_check()
+
+
 });
+
 </script>
 
 </body>
