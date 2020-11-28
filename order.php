@@ -174,6 +174,7 @@ sendToBackendButton.addEventListener('click', function(){
 				$('#json-rulesEngineResponse').text('');
 	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
+				xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 	    },
 			success:function(data){
 				console.log('response:',data);
