@@ -136,7 +136,7 @@ if(!$_POST)
 				$request['nonce'] = $nonce[1] . str_pad(substr($nonce[0], 2, 6), 6, '0');
 
 				$postdata = http_build_query($request, '', '&');
-				$path = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
+
 				$sign = hash_hmac('sha512', hash('sha256', $request['nonce'] . $postdata, true), base64_decode($_COOKIE['X-PRIVATE-KEY']), true);
 
 				// echo '<pre>request: '.print_r($request,true).'</pre>';
@@ -158,7 +158,7 @@ if(!$_POST)
 </div>
 <script>
 var sendToBackendButton = document.querySelector('#sendToBackendButton');
-var backendUrl = '<?php echo $path; ?>';
+var backendUrl = '<?php echo $rulesEngineURL; ?>';
 function wait(ms) { const start = performance.now(); while(performance.now() - start < ms); }
 
 sendToBackendButton.addEventListener('click', function(){
