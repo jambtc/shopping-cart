@@ -77,15 +77,21 @@ if(!$_POST)
 						// commerciante: merchant id:
 						// 2 sex_jam
 
-						// utenti: customer id:
+						// utenti: BOLT customer id:
 						// 2 sergio
 						// 3 paolo
 
 						// redirect_url is url where Rules Engine must send his response
 						// test online https://dashboard.fidelize.tk/index.php?r=ipn/rules
 						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
+
+						// id_cart is 10 chars random id
+						$chars = array_merge(range(0,9), range('a','z'), range('A','Z'));
+		        shuffle($chars);
+		        $cart_id = implode(array_slice($chars, 0, 10));
+
 						$return = array(
-							'id'=>rand(1,1000000),
+							'id'=>$cart_id,
 							'redirect_url'=>'http://localhost/fidelize-dashboard/index.php?r=ipn/rules',
 							'merchant_id'=>2,
 							'customer_id'=>rand(2,3),
@@ -101,12 +107,27 @@ if(!$_POST)
 			  <div class="clear"></div>
 				<a href="index.php" class="button">return</a>
 				</br>
-				<h3>json response</h3>
-				<div class="json-response">
-					<?php
-						echo "<pre>".print_r( json_encode($return,JSON_PRETTY_PRINT),true)."</pre>";
-					?>
-				</div>
+				<fieldset>
+					<label>Merchant's plugin Payload</label>
+
+					<div class="json-response" id='json-response'>
+						<?php
+							echo "<pre>".print_r( json_encode($return,JSON_PRETTY_PRINT),true)."</pre>";
+						?>
+					</div>
+				</fieldset>
+				<fieldset>
+					<label>Payload sent to Rules Engine</label>
+					<div class="json-response" id='json-rulesEnginePayload'>
+						...
+					</div>
+				</fieldset>
+				<fieldset>
+					<label>Rules Engine response</label>
+					<div class="json-response" id='json-rulesEngineResponse'>
+						...
+					</div>
+				</fieldset>
 				<?php
 				// preparazione sign api
 				$nonce = explode(' ', microtime());
@@ -115,7 +136,7 @@ if(!$_POST)
 				$request['nonce'] = $nonce[1] . str_pad(substr($nonce[0], 2, 6), 6, '0');
 
 				$postdata = http_build_query($request, '', '&');
-				$path = 'http://localhost/fidelize-dashboard/index.php?r=ipn/send';
+				$path = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
 				$sign = hash_hmac('sha512', hash('sha256', $request['nonce'] . $postdata, true), base64_decode($_COOKIE['X-PRIVATE-KEY']), true);
 
 				// echo '<pre>request: '.print_r($request,true).'</pre>';
@@ -150,21 +171,22 @@ sendToBackendButton.addEventListener('click', function(){
 			},
 			dataType: "json",
 			beforeSend: function(xhr) {
-				$('.json-response').text('');
+				$('#json-rulesEngineResponse').text('');
 	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
 	    },
 			success:function(data){
 				console.log('response:',data);
 				if (data.success==1){
-					$('.json-response').text(data.message);
-				}else if (data.success==2){
-					$('.json-response').html(data.message);
-					console.log("Response error. Trying again...");
-          wait(5000);
-          repeated_ajax_check();
-				}else{
-					$('.json-response').text(data.message);
+					$('#json-rulesEngineResponse').text(data.message);
+					$('#json-rulesEnginePayload').text(JSON.stringify(data.payload,' ',2));
+				}
+
+				if (data.error){
+					$('#json-rulesEngineResponse').text(data.error);
+					// console.log("Response error. Trying again...");
+          // wait(5000);
+          // repeated_ajax_check();
 				}
 			},
 			error: function(j){
