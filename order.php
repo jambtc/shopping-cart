@@ -175,6 +175,9 @@ sendToBackendButton.addEventListener('click', function(){
 	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
 				xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+				xhr.setRequestHeader('Access-Control-Allow-Credentials', true);
+				xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST');
+				xhr.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
 	    },
 			success:function(data){
 				console.log('response:',data);
@@ -192,9 +195,9 @@ sendToBackendButton.addEventListener('click', function(){
 			},
 			error: function(j){
 				console.log(j);
-				console.log("Ajax error. Trying again...");
-				wait(10000);
-				repeated_ajax_check();
+				// console.log("Ajax error. Trying again...");
+				// wait(10000);
+				// repeated_ajax_check();
 			}
 		});
 	}
