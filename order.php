@@ -90,7 +90,11 @@ if(!$_POST)
 							$rulesEngineURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
-							$rulesEngineURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
+
+							// I use this address to bypass CURL error 
+							$rulesEngineURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
+							// $redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
+							// $rulesEngineURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
 
 						// id_cart is 10 chars random id
@@ -182,10 +186,10 @@ sendToBackendButton.addEventListener('click', function(){
 				$('#json-rulesEngineResponse').text('');
 	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
-				xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-				xhr.setRequestHeader('Access-Control-Allow-Credentials', true);
-				xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST');
-				xhr.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
+				// xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+				// xhr.setRequestHeader('Access-Control-Allow-Credentials', true);
+				// xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST');
+				// xhr.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
 	    },
 			success:function(data){
 				console.log('response:',data);
