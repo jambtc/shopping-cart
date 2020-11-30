@@ -134,7 +134,7 @@ if(!$_POST)
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Rules Engine response</label>
+					<label>Rules Engine fake response</label>
 					<div class="json-response" id='json-rulesEngineResponse'>
 						...
 					</div>
@@ -159,7 +159,7 @@ if(!$_POST)
 				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($request),true); ?>' />
 
 
-				<a href="#" class="button" id="sendToBackendButton">send to backend</a>
+				<a href="#" class="button" id="sendToBackendButton">PAY (send payload to backend)</a>
       </div>
     </div>
 
