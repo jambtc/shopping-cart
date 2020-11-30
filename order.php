@@ -85,6 +85,14 @@ if(!$_POST)
 						// test online https://dashboard.fidelize.tk/index.php?r=ipn/rules
 						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
 
+						if (gethostname() == 'CGF6135T'){
+							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
+							$rulesEngineURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
+						}else{
+							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
+							$rulesEngineURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
+						}
+
 						// id_cart is 10 chars random id
 						$chars = array_merge(range(0,9), range('a','z'), range('A','Z'));
 		        shuffle($chars);
@@ -92,7 +100,7 @@ if(!$_POST)
 
 						$return = array(
 							'id'=>$cart_id,
-							'redirect_url'=>'http://localhost/fidelize-dashboard/index.php?r=ipn/rules',
+							'redirect_url'=>$redirectURL,
 							'merchant_id'=>2,
 							'customer_id'=>rand(2,3),
 							'order_number'=>rand(10000,99999),
