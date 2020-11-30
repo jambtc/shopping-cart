@@ -105,7 +105,7 @@ if(!$_POST)
 							'id'=>$cart_id,
 							'redirect_url'=>$redirectURL,
 							'merchant_id'=>2,
-							'customer_id'=>rand(2,3),
+							'customer_id'=>rand(2,4),
 							'order_number'=>rand(10000,99999),
 							'order_total'=>$total,
 							'items'=>$items
@@ -159,7 +159,8 @@ if(!$_POST)
 				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($request),true); ?>' />
 
 
-				<a href="#" class="button" id="sendToBackendButton">PAY (send payload to backend)</a>
+				<a href="#" class="button" id="sendToBackendButton">fAKE PAY</a>
+				<p class='button'><i>PAY button simulates the payment of the order and sends the payload data to the backend.</i></p>
       </div>
     </div>
 
