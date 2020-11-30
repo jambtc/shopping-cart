@@ -91,9 +91,8 @@ if(!$_POST)
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
 
-							// I use this address to bypass CURL error 
+							// I use this address to bypass CURL error
 							$rulesEngineURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
-							// $redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
 							// $rulesEngineURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
 
