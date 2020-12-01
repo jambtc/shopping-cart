@@ -85,7 +85,7 @@ if(!$_POST)
 						// test online https://dashboard.fidelize.tk/index.php?r=ipn/rules
 						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
 
-						if (gethostname() == 'CGF6135T'){
+						if (gethostname() == 'CGF6135T' || gethostname() == 'sexjam'){
 							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
 							$rulesEngineURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
 						}else{
@@ -186,10 +186,6 @@ sendToBackendButton.addEventListener('click', function(){
 				$('#json-rulesEngineResponse').text('');
 	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
-				// xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-				// xhr.setRequestHeader('Access-Control-Allow-Credentials', true);
-				// xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST');
-				// xhr.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
 	    },
 			success:function(data){
 				console.log('response:',data);
