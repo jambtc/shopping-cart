@@ -102,7 +102,7 @@ if(!$_POST)
 		        $cart_id = implode(array_slice($chars, 0, 10));
 
 						$return = array(
-							'id'=>$cart_id,
+							'id'=>'identifier:'.$cart_id,
 							'redirect_url'=>$redirectURL,
 							'merchant_id'=>2,
 							'customer_id'=>rand(2,4),
