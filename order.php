@@ -96,7 +96,7 @@ if(!$_POST)
 							// I use this address to bypass CURL error
 							// $backendURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
 
-							$backendURL = $cors_api_url . 'dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = $cors_api_url . 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
 
 						// id_cart is 10 chars random id
