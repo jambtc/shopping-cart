@@ -87,13 +87,13 @@ if(!$_POST)
 
 						if (gethostname() == 'CGF6135T' || gethostname() == 'sexjam'){
 							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
-							$rulesEngineURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
 
 							// I use this address to bypass CURL error
-							$rulesEngineURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
-							// $rulesEngineURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
+							// $backendURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
 
 						// id_cart is 10 chars random id
@@ -102,13 +102,14 @@ if(!$_POST)
 		        $cart_id = implode(array_slice($chars, 0, 10));
 
 						$return = array(
-							'id'=>'identifier:'.$cart_id,
+							'id'=>'fidelity:'.$cart_id,
 							'redirect_url'=>$redirectURL,
-							'merchant_id'=>2,
+							'merchant_id'=>rand(1234,1235), // 1234 is to trigger rule engine
 							'customer_id'=>rand(2,4),
 							'order_number'=>rand(10000,99999),
 							'order_total'=>$total,
-							'items'=>$items
+							'items'=>$items,
+							'total_price'=>15 // this to trigger rule engine
 						);
 						echo '<h1>Total: $'.$total.'</h1>';
 					}else{
@@ -170,7 +171,7 @@ if(!$_POST)
 </div>
 <script>
 var sendToBackendButton = document.querySelector('#sendToBackendButton');
-var backendUrl = '<?php echo $rulesEngineURL; ?>';
+var backendUrl = '<?php echo $backendURL; ?>';
 function wait(ms) { const start = performance.now(); while(performance.now() - start < ms); }
 
 sendToBackendButton.addEventListener('click', function(){
