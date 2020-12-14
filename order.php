@@ -85,18 +85,18 @@ if(!$_POST)
 						// test online https://dashboard.fidelize.tk/index.php?r=ipn/rules
 						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
 
-						$cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+						//$cors_api_url = 'https://cors-anywhere.herokuapp.com/';
 
 						if (gethostname() == 'CGF6135T' || gethostname() == 'sexjam'){
 							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
-							$backendURL = 'localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
 
 							// I use this address to bypass CURL error
 							// $backendURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
 
-							$backendURL = $cors_api_url . 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
 
 						// id_cart is 10 chars random id
