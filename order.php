@@ -98,6 +98,7 @@ if(!$_POST)
 
 							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
+						$proxyToBackend = 'proxy.php?url='.$backendURL;
 
 						// id_cart is 10 chars random id
 						$chars = array_merge(range(0,9), range('a','z'), range('A','Z'));
@@ -147,7 +148,8 @@ if(!$_POST)
 				// preparazione sign api
 				$nonce = explode(' ', microtime());
 
-				$request['data'] = print_r(json_encode($return),true);
+				// $request['data'] = print_r(json_encode($return),true);
+				$request = $return;
 				$request['nonce'] = $nonce[1] . str_pad(substr($nonce[0], 2, 6), 6, '0');
 
 				$postdata = http_build_query($request, '', '&');
@@ -174,16 +176,18 @@ if(!$_POST)
 </div>
 <script>
 var sendToBackendButton = document.querySelector('#sendToBackendButton');
-var backendUrl = '<?php echo $backendURL; ?>';
+var proxyToBackend = '<?php echo $proxyToBackend; ?>';
 function wait(ms) { const start = performance.now(); while(performance.now() - start < ms); }
 
 sendToBackendButton.addEventListener('click', function(){
 	function repeated_ajax_check() {
 		$.ajax({
-			url: backendUrl,
+			url: proxyToBackend,
 			type: "POST",
 			data:{
 				'data'	: $('#sendToBackendValues').val(),
+				// 'key' : '<?php //echo $_COOKIE['X-PUBLIC-KEY']; ?>',
+				// 'sign' : '<?php //echo base64_encode($sign); ?>'
 			},
 			dataType: "json",
 			beforeSend: function(xhr) {
