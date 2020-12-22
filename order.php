@@ -109,7 +109,7 @@ if(!$_POST)
 							'id'=>'fidelity:'.$cart_id,
 							'redirect_url'=>$redirectURL,
 							'merchant_id'=>rand(1234,1235), // 1234 is to trigger rule engine
-							'customer_id'=>rand(2,4),
+							'customer_id'=>2,
 							'order_number'=>rand(10000,99999),
 							'order_total'=>$total,
 							'items'=>$items,
