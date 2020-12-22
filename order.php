@@ -105,7 +105,7 @@ if(!$_POST)
 		        shuffle($chars);
 		        $cart_id = implode(array_slice($chars, 0, 10));
 
-						$return = array(
+						$return['event'] = array(
 							'id'=>'fidelity:'.$cart_id,
 							'redirect_url'=>$redirectURL,
 							'merchant_id'=>rand(1234,1235), // 1234 is to trigger rule engine
