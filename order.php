@@ -65,9 +65,9 @@ if(!$_POST)
 
 							$items[] = array(
 								'product_id'=>$row['id'],
-								'product_qty'=>$cnt[$row['id']],
-								'product_price'=>$row['price'],
-								'product_description'=>$row['name']
+								// 'product_qty'=>$cnt[$row['id']],
+								'product_name'=>$row['name'],
+								'product_price'=>1*$row['price'],
 							);
 
 						}
@@ -105,15 +105,21 @@ if(!$_POST)
 		        shuffle($chars);
 		        $cart_id = implode(array_slice($chars, 0, 10));
 
+						// set nonce
+						$microtime = explode(' ', microtime());
+						$nonce = $microtime[1] . str_pad(substr($microtime[0], 2, 6), 6, '0');
+
 						$return['event'] = array(
 							'id'=>'fidelity:'.$cart_id,
 							'redirect_url'=>$redirectURL,
-							'merchant_id'=>rand(1234,1235), // 1234 is to trigger rule engine
-							'customer_id'=>2,
+							'merchant_id'=>'\"'. (string) rand(1234,1235).'\"', // 1234 is to trigger rule engine
+							'customer_id'=>2, // to trigger the customer wallet address
 							'order_number'=>rand(10000,99999),
-							'order_total'=>$total,
+							'order_total'=>$total*1,
 							'items'=>$items,
-							'total_price'=>15 // this to trigger rule engine
+							'total_items'=>count($items)*1,
+							'total_price'=>15, // this to trigger rule engine
+							'nonce'=>$nonce,
 						);
 						echo '<h1>Total: $'.$total.'</h1>';
 					}else{
@@ -145,16 +151,11 @@ if(!$_POST)
 					</div>
 				</fieldset>
 				<?php
+
+
 				// preparazione sign api
-				$nonce = explode(' ', microtime());
-
-				// $request['data'] = print_r(json_encode($return),true);
-				$request = $return;
-				$request['nonce'] = $nonce[1] . str_pad(substr($nonce[0], 2, 6), 6, '0');
-
-				$postdata = http_build_query($request, '', '&');
-
-				$sign = hash_hmac('sha512', hash('sha256', $request['nonce'] . $postdata, true), base64_decode($_COOKIE['X-PRIVATE-KEY']), true);
+				$postdata = http_build_query($return, '', '&');
+				$sign = hash_hmac('sha512', hash('sha256', $nonce . $postdata, true), base64_decode($_COOKIE['X-PRIVATE-KEY']), true);
 
 				// echo '<pre>request: '.print_r($request,true).'</pre>';
 				// echo '<pre>postdata: '.print_r($postdata,true).'</pre>';
@@ -162,7 +163,7 @@ if(!$_POST)
 				// echo '<pre>sign: '.print_r(base64_encode($sign),true).'</pre>';
 				?>
 
-				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($request),true); ?>' />
+				<input type='hid den' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return,JSON_NUMERIC_CHECK),true); ?>' />
 
 
 				<a href="#" class="button" id="sendToBackendButton">fAKE PAY</a>
@@ -186,8 +187,6 @@ sendToBackendButton.addEventListener('click', function(){
 			type: "POST",
 			data:{
 				'data'	: $('#sendToBackendValues').val(),
-				// 'key' : '<?php //echo $_COOKIE['X-PUBLIC-KEY']; ?>',
-				// 'sign' : '<?php //echo base64_encode($sign); ?>'
 			},
 			dataType: "json",
 			beforeSend: function(xhr) {
