@@ -64,7 +64,7 @@ if(!$_POST)
 							$total+=$cnt[$row['id']]*$row['price'];
 
 							$items[] = array(
-								'product_id'=>$row['id'],
+								'product_id'=>(string) "00".$row['id'],
 								// 'product_qty'=>$cnt[$row['id']],
 								'product_name'=>$row['name'],
 								'product_price'=>1*$row['price'],
@@ -85,17 +85,12 @@ if(!$_POST)
 						// test online https://dashboard.fidelize.tk/index.php?r=ipn/rules
 						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
 
-						//$cors_api_url = 'https://cors-anywhere.herokuapp.com/';
 
 						if (gethostname() == 'CGF6135T' || gethostname() == 'sexjam'){
 							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
 							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
-
-							// I use this address to bypass CURL error
-							// $backendURL =	'http://164.68.126.56/index.php?r=ipn/sendToRulesEngine';
-
 							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
 						}
 						$proxyToBackend = 'proxy.php?url='.$backendURL;
@@ -112,9 +107,9 @@ if(!$_POST)
 						$return['event'] = array(
 							'id'=>'fidelity:'.$cart_id,
 							'redirect_url'=>$redirectURL,
-							'merchant_id'=>'\"'. (string) rand(1234,1235).'\"', // 1234 is to trigger rule engine
+							'merchant_id'=>rand(1234,1235), // 1234 is to trigger rule engine
 							'customer_id'=>2, // to trigger the customer wallet address
-							'order_number'=>rand(10000,99999),
+							'order_number'=>(string) rand(10000,99999),
 							'order_total'=>$total*1,
 							'items'=>$items,
 							'total_items'=>count($items)*1,
@@ -163,7 +158,8 @@ if(!$_POST)
 				// echo '<pre>sign: '.print_r(base64_encode($sign),true).'</pre>';
 				?>
 
-				<input type='hid den' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return,JSON_NUMERIC_CHECK),true); ?>' />
+				<!-- <input type='hid den' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return,JSON_NUMERIC_CHECK),true); ?>' /> -->
+					<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return),true); ?>' />
 
 
 				<a href="#" class="button" id="sendToBackendButton">fAKE PAY</a>
