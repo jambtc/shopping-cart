@@ -88,10 +88,10 @@ if(!$_POST)
 
 						if (gethostname() == 'CGF6135T' || gethostname() == 'sexjam'){
 							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
-							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=plugin/saverequest';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
-							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/sendToRulesEngine';
+							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=plugin/saverequest';
 						}
 						$proxyToBackend = 'proxy.php?url='.$backendURL;
 
