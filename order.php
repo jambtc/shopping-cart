@@ -134,13 +134,13 @@ if(!$_POST)
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Payload sent to Rules Engine</label>
+					<label>Payload sent to Backend</label>
 					<div class="json-response" id='json-rulesEnginePayload'>
 						...
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Rules Engine fake response</label>
+					<label>Backend response</label>
 					<div class="json-response" id='json-rulesEngineResponse'>
 						...
 					</div>
@@ -172,6 +172,7 @@ if(!$_POST)
   </div>
 </div>
 <script>
+var waitSpin = '<img width=20 src="img/ajax_load.gif" alt="loading...">';
 var sendToBackendButton = document.querySelector('#sendToBackendButton');
 var proxyToBackend = '<?php echo $proxyToBackend; ?>';
 function wait(ms) { const start = performance.now(); while(performance.now() - start < ms); }
@@ -189,9 +190,11 @@ sendToBackendButton.addEventListener('click', function(){
 				$('#json-rulesEngineResponse').text('');
 	      xhr.setRequestHeader('API-Key', '<?php echo $_COOKIE['X-PUBLIC-KEY']; ?>');
 				xhr.setRequestHeader('API-Sign', '<?php echo base64_encode($sign); ?>');
+				$('#json-rulesEngineResponse').html(waitSpin);
+				$('#json-rulesEnginePayload').html(waitSpin);
 	    },
 			success:function(data){
-				console.log('response:',data);
+				console.log('[Data Response] ',data);
 				if (data.success==1){
 					$('#json-rulesEngineResponse').text(data.message);
 					$('#json-rulesEnginePayload').text(JSON.stringify(data.payload,' ',2));
