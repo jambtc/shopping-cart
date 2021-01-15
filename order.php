@@ -11,6 +11,10 @@ if(!$_POST)
 	exit;
 }
 
+function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
+  return in_array($_SERVER['REMOTE_ADDR'], $whitelist);
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -86,9 +90,9 @@ if(!$_POST)
 						// test localhost http://localhost/fidelize-dashboard/index.php?r=ipn/rules
 
 
-						if (gethostname() == 'CGF6135T' || gethostname() == 'sexjam'){
-							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
-							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=plugin/saverequest';
+						if (isLocalhost()){
+							$redirectURL = 'https://localhost/fidelize-dashboard/index.php?r=ipn/rules';
+							$backendURL = 'https://localhost/fidelize-dashboard/index.php?r=plugin/saverequest';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
 							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=plugin/saverequest';
@@ -158,8 +162,7 @@ if(!$_POST)
 				// echo '<pre>sign: '.print_r(base64_encode($sign),true).'</pre>';
 				?>
 
-				<!-- <input type='hid den' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return,JSON_NUMERIC_CHECK),true); ?>' /> -->
-					<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return),true); ?>' />
+				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return),true); ?>' />
 
 
 				<a href="#" class="button" id="sendToBackendButton">fAKE PAY</a>
@@ -168,6 +171,7 @@ if(!$_POST)
     </div>
 
     <div class="bottom-container-border"></div>
+		
 
   </div>
 </div>

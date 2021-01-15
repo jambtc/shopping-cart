@@ -20,6 +20,7 @@
  */
 
 class proxyCurl {
+
 	/**
 	 * @param URL Path $url
 	 * @param REFERER Referer Path $ref
@@ -31,7 +32,31 @@ class proxyCurl {
 	 * @return Html page containing data returned from the path
 	 */
 
-	public function getUrl($url, $ref, array $req = array(), $verb = 'POST', $fresh = false){
+	protected $proxytunnel = false;	// set proxy
+ 	protected $proxyurl = null;		// set proxy
+ 	protected $proxyuserpwd = null;	// set proxy
+
+
+	/**
+	 * questa funzione imposta il proxy
+		 * I parametri vanno inviati in formato array
+		 *
+		 * @param address Url del proxy
+		 * @param port Porta del proxy
+		 * @param user Nome utente per accedere al proxy
+		 * @param pass Password
+	*/
+	public function setProxy($array){
+		$this->proxytunnel = true;
+		$this->proxyurl = $array['proxyURI'];
+		$this->proxyuserpwd = $array['username'].':'.$array['password'];
+	}
+
+	public function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
+	  return in_array($_SERVER['REMOTE_ADDR'], $whitelist);
+	}
+
+	public function getUrl($url, array $req = array()){
 		$timeout = 15; // wait 15 seconds
 
 		// generate the POST data string
@@ -54,23 +79,24 @@ class proxyCurl {
 		curl_setopt ( $ch, CURLOPT_TIMEOUT, $timeout );
 		curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
+		// set proxy
+		if ($this->proxytunnel == true){
+			curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, $this->proxytunnel);
+			curl_setopt($ch, CURLOPT_PROXY, $this->proxyurl);
+			curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxyuserpwd);
+			curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_1);
+		}
+
 		curl_setopt($ch, CURLOPT_URL, $url );
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  // man-in-the-middle defense by verifying ssl cert.
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);  // man-in-the-middle defense by verifying ssl cert.
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
 
-		curl_setopt($ch, CURLOPT_REFERER, $ref);
+		curl_setopt($ch, CURLOPT_REFERER, $url);
 
-		if ($fresh)
-		 	curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
-
-
-		if ($verb == 'POST'){
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-    }else
-			curl_setopt($ch, CURLOPT_POST, 0);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers_str);
 
