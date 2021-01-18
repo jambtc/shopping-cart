@@ -91,8 +91,8 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 
 
 						if (isLocalhost()){
-							$redirectURL = 'https://localhost/fidelize-dashboard/index.php?r=ipn/rules';
-							$backendURL = 'https://localhost/fidelize-dashboard/index.php?r=plugin/saverequest';
+							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
+							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=plugin/saverequest';
 						}else{
 							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
 							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=plugin/saverequest';
@@ -117,7 +117,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 							'order_total'=>$total*1,
 							'items'=>$items,
 							'total_items'=>count($items)*1,
-							'total_price'=>15, // this to trigger rule engine
+							'total_price'=>(rand(1,2) % 2 ? $total*1 : 15),  // 15 is used to trigger rule engine
 							'nonce'=>$nonce,
 						);
 						echo '<h1>Total: $'.$total.'</h1>';
@@ -171,7 +171,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
     </div>
 
     <div class="bottom-container-border"></div>
-		
+
 
   </div>
 </div>
