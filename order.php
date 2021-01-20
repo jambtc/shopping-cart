@@ -92,10 +92,15 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 
 						if (isLocalhost()){
 							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
-							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=plugin/saverequest';
+							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=rulesEngine/saveRequest';
 						}else{
-							$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
-							$backendURL = 'https://dashboard.fidelize.tk/index.php?r=plugin/saverequest';
+							if (!PRODUCTION){
+								$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
+								$backendURL = 'https://dashboard.fidelize.tk/index.php?r=rulesEngine/saveRequest';
+							}else{
+								$redirectURL = 'https://dashboard.txlab.it/index.php?r=ipn/rules';
+								$backendURL = 'https://dashboard.txlab.it/index.php?r=rulesEngine/saveRequest';
+							}
 						}
 						$proxyToBackend = 'proxy.php?url='.$backendURL;
 
