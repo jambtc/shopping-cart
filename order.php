@@ -91,14 +91,14 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 
 
 						if (isLocalhost()){
-							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=ipn/rules';
+							$redirectURL = 'http://localhost/fidelize-dashboard/index.php?r=api';
 							$backendURL = 'http://localhost/fidelize-dashboard/index.php?r=rulesEngine/saveRequest';
 						}else{
 							if (!PRODUCTION){
-								$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=ipn/rules';
+								$redirectURL = 'https://dashboard.fidelize.tk/index.php?r=api';
 								$backendURL = 'https://dashboard.fidelize.tk/index.php?r=rulesEngine/saveRequest';
 							}else{
-								$redirectURL = 'https://dashboard.txlab.it/index.php?r=ipn/rules';
+								$redirectURL = 'https://dashboard.txlab.it/index.php?r=api';
 								$backendURL = 'https://dashboard.txlab.it/index.php?r=rulesEngine/saveRequest';
 							}
 						}
