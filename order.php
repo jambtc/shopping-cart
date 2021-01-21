@@ -103,6 +103,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 							}
 						}
 						$proxyToBackend = 'proxy.php?url='.$backendURL;
+						$proxyToBackendAPI = 'proxy-emulate-re.php?url='.$redirectURL;
 
 						// id_cart is 10 chars random id
 						$chars = array_merge(range(0,9), range('a','z'), range('A','Z'));
@@ -142,11 +143,19 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 						?>
 					</div>
 				</fieldset>
+
+				<a href="#" class="button" id="sendToBackendButton">fAKE PAY</a>
+				<p class='button'><i>PAY button simulates the payment of the order and sends the payload data to the backend.</i></p>
+
+
 				<fieldset>
 					<label>Payload sent to Backend</label>
-					<div class="json-response" id='json-rulesEnginePayload'>
+					<div class="json-response" id='json-rulesEnginePayload' style="max-width: 620px;
+    overflow-wrap: break-word;">
 						...
 					</div>
+					<a href="#" class="btn btn-primary" id="sendToBackendAPIButton">from RulesENgine to backendAPI</a>
+
 				</fieldset>
 				<fieldset>
 					<label>Backend response</label>
@@ -170,8 +179,6 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return),true); ?>' />
 
 
-				<a href="#" class="button" id="sendToBackendButton">fAKE PAY</a>
-				<p class='button'><i>PAY button simulates the payment of the order and sends the payload data to the backend.</i></p>
       </div>
     </div>
 
@@ -181,10 +188,55 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
   </div>
 </div>
 <script>
+$('#sendToBackendAPIButton').hide();
 var waitSpin = '<img width=20 src="img/ajax_load.gif" alt="loading...">';
 var sendToBackendButton = document.querySelector('#sendToBackendButton');
+var sendToBackendAPIButton = document.querySelector('#sendToBackendAPIButton');
 var proxyToBackend = '<?php echo $proxyToBackend; ?>';
+var proxyToBackendAPI = '<?php echo $proxyToBackendAPI; ?>';
+
+var responseFromRuleEngine = {};
+
 function wait(ms) { const start = performance.now(); while(performance.now() - start < ms); }
+
+sendToBackendAPIButton.addEventListener('click', function(){
+		$.ajax({
+			url: proxyToBackendAPI,
+			type: "POST",
+			data:{
+				'data'	: JSON.stringify(responseFromRuleEngine),
+			},
+			dataType: "json",
+			beforeSend: function(xhr) {
+				// $('#json-rulesEngineResponse').text('');
+	      // xhr.setRequestHeader('API-Key', '<?php //echo $_COOKIE['X-PUBLIC-KEY']; ?>');
+				// xhr.setRequestHeader('API-Sign', '<?php //echo base64_encode($sign); ?>');
+				// $('#json-rulesEngineResponse').html(waitSpin);
+				// $('#json-rulesEnginePayload').html(waitSpin);
+	    },
+			success:function(data){
+				console.log('[Data Response from backend API] ',data);
+				// if (data.success==1){
+				// 	$('#json-rulesEngineResponse').text(data.message);
+				// 	$('#json-rulesEnginePayload').text(JSON.stringify(data.payload,' ',2));
+				// 	$('#sendToBackendAPIButton').show();
+				// }
+				//
+				// if (data.error){
+				// 	$('#json-rulesEngineResponse').text(data.error);
+				// 	// console.log("Response error. Trying again...");
+        //   // wait(5000);
+        //   // repeated_ajax_check();
+				// }
+			},
+			error: function(j){
+				console.log(j);
+				// console.log("Ajax error. Trying again...");
+				// wait(10000);
+				// repeated_ajax_check();
+			}
+		});
+});
 
 sendToBackendButton.addEventListener('click', function(){
 	function repeated_ajax_check() {
@@ -204,9 +256,39 @@ sendToBackendButton.addEventListener('click', function(){
 	    },
 			success:function(data){
 				console.log('[Data Response] ',data);
+				var jevent = JSON.parse(data.payload);
+				console.log('[Data Parsed] ',jevent);
 				if (data.success==1){
 					$('#json-rulesEngineResponse').text(data.message);
 					$('#json-rulesEnginePayload').text(JSON.stringify(data.payload,' ',2));
+					$('#sendToBackendAPIButton').show();
+
+					var json = jevent.event;
+					responseFromRuleEngine = {
+						'event': {
+							'id': json.id,
+							'nonce': json.nonce,
+							'merchant_id': json.merchant_id,
+							'customer_id': json.customer_id,
+							'actions': {
+					                'pay':  {
+					                     'token_amount': 1.5,
+					                     'client_address': json.client_address,
+					                     'message': 'message-to-send-in-transaction'
+					                 },
+					                'mail': {
+					                     'message': 'email-message-to-client'
+					                 },
+					                'push': {
+					                     'message': 'push-message-to-client'
+					                }
+					             }
+						}
+					}
+
+					console.log('[Data prepared] ',responseFromRuleEngine);
+
+
 				}
 
 				if (data.error){
