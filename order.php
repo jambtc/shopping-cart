@@ -177,6 +177,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 				?>
 
 				<input type='hidden' id="sendToBackendValues" value='<?php  echo print_r(json_encode($return),true); ?>' />
+				<input type='hidden' id="inputresponseFromRuleEngine" value='almomentoènullo' />
 
 
       </div>
@@ -204,7 +205,7 @@ sendToBackendAPIButton.addEventListener('click', function(){
 			url: proxyToBackendAPI,
 			type: "POST",
 			data:{
-				'data'	: JSON.stringify(responseFromRuleEngine),
+				'data'	: $('#inputresponseFromRuleEngine').val(),
 			},
 			dataType: "json",
 			beforeSend: function(xhr) {
@@ -287,6 +288,8 @@ sendToBackendButton.addEventListener('click', function(){
 					}
 
 					console.log('[Data prepared] ',responseFromRuleEngine);
+
+					$('#inputresponseFromRuleEngine').val(JSON.stringify(responseFromRuleEngine));
 
 
 				}
